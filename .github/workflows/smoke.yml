@@ -17,6 +17,15 @@ concurrency:
 
 jobs:
   smoke:
+    # The daily run belongs to the team repository. Any other copy of this
+    # repo -- a personal one, a fork -- keeps the code without inheriting
+    # the schedule: it would drive the same suite against the same live
+    # storefront, doubling the load on production and reporting the same
+    # results twice. A copy can still be run deliberately from the Actions
+    # tab; only the automatic triggers are held back.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || github.repository == 'Guardian-Web-Automation/Guzz_headless_web'
     runs-on: ubuntu-latest
     timeout-minutes: 75
     # Job-level env so the Slack step's `if:` can read the secret
